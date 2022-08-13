@@ -1,3 +1,0 @@
-[submodule "guide"]
-	path = guide
-	url = git@github.com:elylucas/ng-nest-realtime-apps-guide.git
