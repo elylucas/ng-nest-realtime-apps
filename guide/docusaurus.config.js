@@ -9,7 +9,7 @@ const config = {
   title: 'Realtime Apps with Angular & NestJS',
   tagline: 'Dinosaurs are cool',
   url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/ng-nest-realtime-apps/',
+  baseUrl: process.env.GH_ACTION ? '/ng-nest-realtime-apps/' : '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
