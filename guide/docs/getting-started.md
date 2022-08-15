@@ -1,8 +1,14 @@
+---
+slug: /
+---
+
 # Realtime apps with Angular & NestJS
 
 ## Getting started
 
 ### Clone Git repo
+
+
 
 To begin, clone the starter app from Github:
 

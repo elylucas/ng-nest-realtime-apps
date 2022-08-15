@@ -6,7 +6,8 @@
   "scripts": {
     "installdeps": "npm install && npm run installappdeps",
     "installappdeps": "concurrently \"npm --prefix ./client install\" \"npm --prefix ./server install\"",
-    "start": "concurrently \"npm --prefix ./client run start\" \"npm --prefix ./server run start:debug\""
+    "start": "concurrently \"npm --prefix ./client run start\" \"npm --prefix ./server run start:debug\"",
+    "guide": "npm --prefix ./guide install && npm --prefix ./guide run serve"
   },
   "author": "",
   "license": "ISC",
