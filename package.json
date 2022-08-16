@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "installdeps": "npm install && npm run installappdeps",
-    "installappdeps": "concurrently \"npm --prefix ./client install\" \"npm --prefix ./server install\"",
-    "start": "concurrently \"npm --prefix ./client run start\" \"npm --prefix ./server run start:debug\"",
-    "guide": "npm --prefix ./guide install && npm --prefix ./guide run serve"
+    "start": "npm --prefix ./client run start",
+    "postinstall": "concurrently \"npm --prefix ./client install\" \"npm --prefix ./server install\"",
+    "guide": "path-exists guide && echo 'guide already cloned' || git clone -b guide git@github.com:elylucas/ng-nest-realtime-apps.git guide && path-exists ./guide/node_modules && echo 'guide deps already installed' || npm --prefix ./guide install && npm --prefix ./guide run serve"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^7.3.0"
+    "concurrently": "^7.3.0",
+    "path-exists-cli": "^2.0.0"
   }
 }

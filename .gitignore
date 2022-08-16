@@ -1,29 +1,20 @@
 /guide
+.docusaurus
 
-# compiled output
+# Compiled output
+build
 dist
-node_modules
+tmp
 out-tsc
 bazel-out
 
-# Logs
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# OS
-.DS_Store
-
-# Tests
-/coverage
-/.nyc_output
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
 
 # IDEs and editors
-/.idea
+.idea/
 .project
 .classpath
 .c9/
@@ -31,18 +22,24 @@ lerna-debug.log*
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
+# Visual Studio Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.history/*
 
 # Miscellaneous
-.angular/cache
+.angular
 .sass-cache/
 connect.lock
 coverage
 libpeerconnection.log
 testem.log
 typings
+package-lock.json
+
+# System files
+.DS_Store
+Thumbs.db
