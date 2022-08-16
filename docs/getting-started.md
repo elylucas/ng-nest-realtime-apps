@@ -4,7 +4,7 @@ slug: /
 
 # Realtime apps with Angular & NestJS
 
-## Getting started!!! boo
+## Getting started
 
 ### Clone Git repo
 

@@ -4,10 +4,7 @@ on:
   push:
     branches:
       - guide
-
-env:
-  GUIDE: true
-  
+ 
 jobs:
   deploy:
     name: Deploy to GitHub Pages

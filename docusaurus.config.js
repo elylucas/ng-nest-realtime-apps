@@ -4,14 +4,12 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
-console.log(process.env);
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Realtime Apps with Angular & NestJS',
   tagline: 'Dinosaurs are cool',
   url: 'https://your-docusaurus-test-site.com',
-  baseUrl: process.env.GUIDE ? '/ng-nest-realtime-apps/' : '/',
+  baseUrl: process.env.NODE_ENV === 'production' ? '/ng-nest-realtime-apps/' : '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
