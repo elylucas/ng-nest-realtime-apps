@@ -1,0 +1,19 @@
+{
+  "unversionedId": "lab1",
+  "id": "lab1",
+  "title": "Lab1 - Echo Client",
+  "description": "",
+  "source": "@site/docs/lab1.md",
+  "sourceDirName": ".",
+  "slug": "/lab1",
+  "permalink": "/lab1",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Realtime apps with Angular & NestJS",
+    "permalink": "/"
+  }
+}

@@ -1,43 +1,41 @@
+# Website
 
-# Realtime Apps with Angular & NestJS Workshop
+This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
-Welcome to the Realtime Apps with Angular & NestJS Workshop! 
+### Installation
 
-## Getting Started
-
-To get started, first clone the repo:
-
-```bash
-git clone https://github.com/elylucas/ng-nest-realtime-apps.git
+```
+$ yarn
 ```
 
-The repo folder contains three folders:
+### Local Development
 
-- client: The Angular app
-- server: The Nest app
-- guide: This guide in md and html formats
-
-
-## Install dependencies
-
-```bash
-npm run installdeps
+```
+$ yarn start
 ```
 
-This will install the dependencies for both apps.
+This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
-## Open the Guide
+### Build
 
-The guide can be viewed online at [https://elylucas.github.io/ng-nest-realtime-apps/](https://elylucas.github.io/ng-nest-realtime-apps/).
-
-Alternatively, you can view the guide locally by running the following from the root directory:
-
-```bash
-npm run guide
+```
+$ yarn build
 ```
 
-This will download the dependencies for the guide and serve them at [http://localhost:8080](http://localhost:8080).
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
 
-Once the guide is open, you can begin following along.
+### Deployment
 
-Enjoy!
+Using SSH:
+
+```
+$ USE_SSH=true yarn deploy
+```
+
+Not using SSH:
+
+```
+$ GIT_USER=<Your GitHub username> yarn deploy
+```
+
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.

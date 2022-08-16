@@ -1,0 +1,84 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "loadedVersions": [
+        {
+          "versionName": "current",
+          "label": "Next",
+          "banner": null,
+          "badge": false,
+          "className": "docs-version-current",
+          "path": "/",
+          "tagsPath": "/tags",
+          "isLast": true,
+          "routePriority": -1,
+          "sidebarFilePath": "/Users/elylucas/projects/talks/ngconf2022/ng-nest-realtime/workshop/ng-nest-realtime-apps/sidebars.js",
+          "contentPath": "/Users/elylucas/projects/talks/ngconf2022/ng-nest-realtime/workshop/ng-nest-realtime-apps/docs",
+          "contentPathLocalized": "/Users/elylucas/projects/talks/ngconf2022/ng-nest-realtime/workshop/ng-nest-realtime-apps/i18n/en/docusaurus-plugin-content-docs/current",
+          "docs": [
+            {
+              "unversionedId": "getting-started",
+              "id": "getting-started",
+              "title": "Realtime apps with Angular & NestJS",
+              "description": "Getting started",
+              "source": "@site/docs/getting-started.md",
+              "sourceDirName": ".",
+              "slug": "/",
+              "permalink": "/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {
+                "slug": "/"
+              },
+              "sidebar": "tutorialSidebar",
+              "next": {
+                "title": "Lab1 - Echo Client",
+                "permalink": "/lab1"
+              }
+            },
+            {
+              "unversionedId": "lab1",
+              "id": "lab1",
+              "title": "Lab1 - Echo Client",
+              "description": "",
+              "source": "@site/docs/lab1.md",
+              "sourceDirName": ".",
+              "slug": "/lab1",
+              "permalink": "/lab1",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {},
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Realtime apps with Angular & NestJS",
+                "permalink": "/"
+              }
+            }
+          ],
+          "drafts": [],
+          "sidebars": {
+            "tutorialSidebar": [
+              {
+                "type": "doc",
+                "id": "getting-started"
+              },
+              {
+                "type": "doc",
+                "id": "lab1"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "docusaurus-plugin-content-pages": {
+    "default": []
+  },
+  "docusaurus-plugin-debug": {},
+  "docusaurus-theme-classic": {},
+  "docusaurus-bootstrap-plugin": {},
+  "docusaurus-mdx-fallback-plugin": {}
+}
