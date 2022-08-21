@@ -10,15 +10,11 @@ export class AppComponent {
   message = '';
   user = '';
 
-  connect() {
+  constructor() {}
 
-  }
+  connect() {}
 
-  disconnect() {
+  disconnect() {}
 
-  }
-
-  sendMessage() {
-
-  }
+  sendMessage() {}
 }
