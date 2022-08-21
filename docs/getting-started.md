@@ -2,46 +2,46 @@
 slug: /
 ---
 
-# Realtime apps with Angular & NestJS
+# Getting Started
 
-## Getting started
+Welcome to the Realtime apps with Angular and NestJS workshop!
 
-### Clone Git repo
+This workshop covers how to use NestJS as a websocket server for Angular apps.
 
+## Clone Repo and Install Dependencies
 
-
-To begin, clone the starter app from Github:
+To get started, clone the repo and install the dependencies:
 
 ```bash
 git clone https://github.com/elylucas/realtime-ng-nest.git
 ```
 
-The repo folder contains three folders:
-
-- **client**: The Angular app
-- **server**: The Nest app
-- **guide**: This guide in md and html formats
-
-### Install dependencies
+Go into the repo's folder and install the dependencies:
 
 ```bash
-npm run installdeps
+cd realtime-ng-nest
+npm install
 ```
 
-This will install the dependencies for both apps.
+The repo folder contains two pertinent folders:
 
-### Start app
+- **client**: The Angular front-end app
+- **server**: NestJS back-end app
+
+Running `npm install` from above installs the dependencies for both apps.
+
+## Start App
+
+Next, open the code folders in your code editor. You might choose to open the app at the root level, or open each folder in the own editor instance.
+
+To start the app run the following in the root folder:
 
 ```bash
-npm run start
+npm start
 ```
 
+This will start the dev servers for both apps.
 
-aaabb
+The Angular app should launch a browser to [http://localhost:4200](http://localhost:4200). If it did not, go ahead and open it. The initial page will have a simple welcome message.
 
-
-This will start both the Angular and Nest apps at the same time. The Angular app
-will run on port 4200 and the Nest app will be running on port 3000.
-
-Next, open the folder in your code editor. You can also open the client and
-server folder is separate instances of your editor if you choose.
+Once the app is running and you have your code editor open, you are ready to continue to the first lab.

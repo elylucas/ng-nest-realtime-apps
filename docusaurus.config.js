@@ -48,6 +48,9 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      navbar: {
+        title: 'Realtime apps with Angular & NestJS'
+      },
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
