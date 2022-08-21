@@ -1,0 +1,107 @@
+button {
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+}
+
+input {
+  padding: 8px;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+}
+
+.chat-container {
+
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  height: 50vh;
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+
+  .left-pane {
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+
+    .rooms {
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          padding-left: 8px;
+          cursor: pointer;
+        }
+
+        li.active {
+          background-color: #fafafa;
+          border: 1px solid #ddd;
+        }
+      }
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      flex: 1;
+      width: 100%;
+
+      button {
+        border-left: none;
+        border-right: none;
+      }
+
+      button:last-child {
+        border: none;
+      }
+    }
+  }
+
+  .chat-pane {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .user {
+      padding: 8px;
+      background-color: #fafafa;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .messages {
+      overflow-y: auto;
+      padding: 4px;
+      flex: 1;
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .chat-box {
+      display: flex;
+      width: 100%;
+      justify-content: end;
+      input {
+        flex: 1;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;;
+      }
+
+      button {
+        border-bottom: none;
+        border-right: none;
+      }
+    }
+  }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+  }
+}

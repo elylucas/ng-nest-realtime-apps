@@ -1,1 +1,54 @@
-<div>Welcome!</div>
+<div *ngIf="connected; else login">
+  <div class="chat-container">
+    <div class="left-pane">
+      <div class="rooms">
+        <h3>Rooms:</h3>
+        <ul>
+          <li class="active">Room 1</li>
+          <li>Room 2</li>
+        </ul>
+      </div>
+      <div class="actions">
+        <button type="button" (click)="disconnect()">Create Room</button>
+        <button type="button" (click)="disconnect()">Disconnect</button>
+      </div>
+    </div>
+
+    <div class="chat-pane">
+      <div class="user">Welcome user, Room room</div>
+      <div class="messages">
+        <div class="messages">
+          <ul>
+            <li>[user]: message</li>
+          </ul>
+        </div>
+        <ng-template #noMessages>No messages in this room</ng-template>
+      </div>
+
+      <div class="chat-box">
+        <input
+          type="text"
+          name="message"
+          [(ngModel)]="message"
+          (keyup.enter)="sendMessage()"
+        />
+        <button type="button" (click)="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #login>
+  <div>
+    <label
+      >Name
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="user"
+        (keyup.enter)="connect()"
+      />
+    </label>
+    <button type="button" (click)="connect()">Connect</button>
+  </div>
+</ng-template>
