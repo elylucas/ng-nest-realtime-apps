@@ -1,12 +1,12 @@
 button {
-  background-color: #fafafa;
-  border: 1px solid #ddd;
+  background-color: #ddd;
+  border: 1px solid #bbb;
   padding: 8px 16px;
 }
 
 input {
   padding: 8px;
-  background-color: #fafafa;
+  background-color: #fdfdfd;
   border: 1px solid #ddd;
 }
 
@@ -24,7 +24,13 @@ input {
     display: flex;
     flex-direction: column;
 
-    .rooms {
+    .rooms, .users {
+
+      h3 {
+        background-color: #f5f5f5;
+      }
+
+      flex: 1;
       ul {
         list-style-type: none;
         margin: 0;
@@ -36,7 +42,7 @@ input {
         }
 
         li.active {
-          background-color: #fafafa;
+          background-color: #f5f5f5;
           border: 1px solid #ddd;
         }
       }
@@ -67,7 +73,7 @@ input {
 
     .user {
       padding: 8px;
-      background-color: #fafafa;
+      background-color: #f5f5f5;
       border-bottom: 1px solid #ddd;
     }
 
