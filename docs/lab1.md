@@ -1,4 +1,8 @@
-# Lab1 - Echo
+---
+sidebar_position: 1
+---
+
+# Lab1 - Echo Client
 
 In this lab we will build the "hello world" of websocket apps, an echo server
 that will simply reply back any text that a client sends to it.
