@@ -53,6 +53,33 @@ getRooms() {
 }
 ```
 
+update disconnect to remove users from rooms and return the user
+
+```ts
+disconnect(clientId: string) {
+  const users = Object.keys(this.users);
+  let userToRemove = '';
+  users.forEach((user) => {
+    if (this.users[user] === clientId) {
+      userToRemove = user;
+      return;
+    }
+  });
+  if (userToRemove) {
+    delete this.users[userToRemove];
+    //highlight-start
+    // remove user from any joined rooms
+    const rooms = Object.keys(this.chatRooms);
+    rooms.forEach((room) => {
+      this.leaveRoom(room, userToRemove);
+    });
+    //highlight-end
+  }
+  //highlight-next-line
+  return userToRemove;
+}
+```
+
 ### Update chat gateway
 
 When client identifies, return list of rooms as some initial data it will need:
@@ -82,6 +109,18 @@ handleLeaveRoom(client: Socket, data: { user: string; room: string }) {
   this.chatService.leaveRoom(data.room, data.user);
   client.leave(data.room);
   client.to(data.room).emit('userLeft', data.user);
+}
+```
+
+update disconnect method to emit user left room
+
+```ts
+@SubscribeMessage('disconnect')
+async handleDisconnect(client: Socket) {
+  //highlight-start
+  const user = this.chatService.disconnect(client.id);
+  client.broadcast.emit('userLeft', user);
+  //highlight-end
 }
 ```
 
@@ -137,14 +176,16 @@ getChatAppData(): Observable<ChatAppData> {
     this.$chatRoom,
     this.$connected,
     this.$rooms,
+    this.$user,
   ]).pipe(
     map((value) => {
-      const [activeRoom, chatRoom, connected, rooms] = value;
+      const [activeRoom, chatRoom, connected, rooms, user] = value;
       return {
         activeRoom,
         chatRoom,
         connected,
         rooms,
+        user,
       };
     })
   );
@@ -157,11 +198,33 @@ add callback to identify method to get the list of rooms and set them
 ```ts
 this.client.on('connect', () => {
   //highlight-start
-  this.client.emit('identify', this.user, (rooms: string[]) => {
+  this.client.emit('identify', this.$user.value, (rooms: string[]) => {
     this.$rooms.next(rooms);
   });
   //highlight-end
   this.$connected.next(true);
+});
+```
+
+add userJoined/userLeft socket listeners in constructor:
+
+```ts
+this.client.on('userJoined', (user: string) => {
+  const chatRoom = this.$chatRoom.value;
+  if (chatRoom) {
+    chatRoom.users.push(user);
+    chatRoom.users.sort((a, b) => {
+      return a.toLowerCase() >= b.toLowerCase() ? 1 : -1;
+    });
+    this.$chatRoom.next(chatRoom);
+  }
+});
+this.client.on('userLeft', (user: string) => {
+  const chatRoom = this.$chatRoom.value;
+  if (chatRoom) {
+    chatRoom.users = chatRoom.users.filter((u) => u !== user);
+    this.$chatRoom.next(chatRoom);
+  }
 });
 ```
 
@@ -171,7 +234,7 @@ add joinRoom/leaveRoom/switchRoom methods:
 joinRoom(room: string) {
   this.client.emit(
     'joinRoom',
-    { user: this.user, room },
+    { user: this.$user.value, room },
     (chatRoom: ChatRoom) => {
       this.$chatRoom.next(chatRoom);
     }
@@ -179,7 +242,7 @@ joinRoom(room: string) {
 }
 
 leaveRoom(room: string) {
-  this.client.emit('leaveRoom', { user: this.user, room });
+  this.client.emit('leaveRoom', { user: this.$user.value, room });
 }
 
 switchRoom(room: string) {
@@ -198,7 +261,7 @@ connect(user: string) {
     return;
   }
   localStorage.setItem('user', user);
-  this.user = user;
+  this.$user.next(user);
   this.client.connect();
   //highlight-next-line
   this.joinRoom(this.$activeRoom.value);
@@ -213,7 +276,7 @@ disconnect() {
   //highlight-next-line
   this.leaveRoom(this.$activeRoom.value);
   this.client.disconnect();
-  this.user = '';
+  this.$user.next('');
 }
 ```
 
@@ -247,4 +310,10 @@ replace hard coded room name with activeroom:
 <div class="user">Welcome {{ user }}, Room {{ data.activeRoom }}</div>
 ```
 
-now you can switch between rooms
+replace users li with new one:
+
+```html
+<li *ngFor="let user of data.chatRoom.users">{{ user }}</li>
+```
+
+now you can switch between rooms and see users entering/leaving rooms

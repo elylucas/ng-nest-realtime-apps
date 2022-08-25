@@ -13,7 +13,7 @@ the user with the app.
 
 ### Chat Service
 
-update chat service to hold users and chatrooms:
+update chat service to hold users:
 
 ```ts title=./server/src/chat/chat.service.ts
 import { Injectable } from '@nestjs/common';
@@ -32,6 +32,7 @@ export class ChatService {
   }
 
   disconnect(clientId: string) {
+    //look up user by clientId:
     const users = Object.keys(this.users);
     let userToRemove = '';
     users.forEach((user) => {
@@ -83,6 +84,7 @@ import { io, Socket } from 'socket.io-client';
 
 export interface ChatAppData {
   connected: boolean;
+  user: string;
 }
 
 @Injectable({
@@ -91,32 +93,33 @@ export interface ChatAppData {
 export class ChatService {
   private url = 'http://localhost:3000/chat';
   private client: Socket;
-  private user: string = '';
   private $connected = new BehaviorSubject(false);
+  private $user = new BehaviorSubject('');
 
   constructor() {
     this.client = io(this.url, { autoConnect: false });
 
     this.client.on('connect', () => {
-      this.client.emit('identify', this.user);
+      this.client.emit('identify', this.$user.value);
       this.$connected.next(true);
     });
     this.client.on('disconnect', () => {
       this.$connected.next(false);
     });
 
-    this.user = localStorage.getItem('user') || '';
-    if (this.user) {
-      this.connect(this.user);
+    const user = localStorage.getItem('user') || '';
+    if (user) {
+      this.connect(user);
     }
   }
 
   getChatAppData(): Observable<ChatAppData> {
-    const data = combineLatest([this.$connected]).pipe(
+    const data = combineLatest([this.$connected, this.$user]).pipe(
       map((value) => {
-        const [connected] = value;
+        const [connected, user] = value;
         return {
           connected,
+          user,
         };
       })
     );
@@ -128,14 +131,14 @@ export class ChatService {
       return;
     }
     localStorage.setItem('user', user);
-    this.user = user;
+    this.$user.next(user);
     this.client.connect();
   }
 
   disconnect() {
     localStorage.removeItem('user');
     this.client.disconnect();
-    this.user = '';
+    this.$user.next('');
   }
 }
 ```
@@ -190,7 +193,7 @@ change lines 1 + 2 to use chatAppData top ng-container to
 update welcome on line 24 to use user variable
 
 ```html
-<div class="user">Welcome {{ user }}, Room room</div>
+<div class="user">Welcome {{ data.user }}, Room room</div>
 ```
 
 Run the app, see it work for connecting/disconnecting
