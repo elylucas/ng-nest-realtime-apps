@@ -1,0 +1,16 @@
+{
+  "colorTabs.config": [
+    {
+      "regex": "server/.*",
+      "color": "#00FF0055",
+      "lable": "Node"
+    },
+    {
+      "regex": "client/.*",
+      "color": "#FF000055",
+      "label": "Angular"
+    }
+  ],
+  "colorTabs.titleBackground": true,
+  "colorTabs.ignoreCase": true
+}
