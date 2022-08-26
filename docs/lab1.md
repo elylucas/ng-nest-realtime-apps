@@ -13,7 +13,13 @@ To get started, checkout the `lab1-start` branch:
 git checkout lab1-start
 ```
 
-> To view a completed version of this lab, checkout the `lab1-complete` branch.
+:::info
+
+You can find a completed version of this lab in the
+[lab1-complete](https://github.com/elylucas/ng-nest-realtime-apps/tree/lab1-complete)
+branch.
+
+:::
 
 ## Required Dependencies
 

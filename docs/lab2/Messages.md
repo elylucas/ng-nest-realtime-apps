@@ -4,83 +4,104 @@ sidebar_position: 4
 
 # Sending Messages
 
-## Nest
+Whats a chat app that can't send message? Not much. So let's fix that.
 
-We have most of the infrastructure in place to 
+## Nest
 
 ### ChatService
 
+#### Add Messages to Chat Room
+
+We have already have the infrastructure in place to store our chat rooms and
+messages in the `chatRooms` variable. The only thing we need to do is add a
+method to the service that will add a message to the appropriate chat room. Add
+this method to the `ChatService` class:
+
 add addMessage to class:
 
-```ts
+```ts title=./server/src/chat/chat.service.ts
 addMessage(room: string, message: Message) {
   this.chatRooms[room].messages.push(message);
 }
 ```
 
-### Chat Gateway
+### ChatGateway
 
-add Socket server reference:
+#### Handle Message Events
 
-```ts
-@WebSocketServer() server: Server;
-```
-
-> `@WebSocketServer` is imported from '@nestjs/websockets' and `Server` is
-> imported from 'socket.io'
-
-add handleMessageToServer method:
+Add a new event handler to listen for `messageToServer` events:
 
 ```ts
 @SubscribeMessage('messageToServer')
 handleMessageToServer(
-  @MessageBody()
+  client: Socket,
   data: {
     room: string;
     message: Message;
   },
 ) {
   this.chatService.addMessage(data.room, data.message);
-  this.server.to(data.room).emit('messageToClient', data.message);
+  client.to(data.room).emit('messageToClient', data.message);
+  client.emit('messageToClient', data.message);
 }
 ```
 
-point out MessageBody, this.server.to (sending to room)
+> Message is imported from './chat/chat.service'
+
+To make things a bit easier, we define two different events: `messageToServer`
+that gets called when a client sends a message to the server, and
+`messageToClient`, when the message is sent out to all the other clients.
+
+This handler listens for `messageToServer`, adds the new message to the chat
+service, then broadcasts out the message back to the clients with
+`messageToClient`.
+
+`client.to()` will send the message to all other clients in the room except for
+the current client. Therefore, we send the same message back to the current
+client with `client.emit()`.
 
 ## Angular
 
-### Chat Service
+### ChatService
 
-listen for messageToClient event in ctor below other listeners:
+#### Add Message Event Listener
+
+In the Angular `ChatService`, we will add a listener for incoming messages. Add
+the following in the constructor below the other listeners:
 
 ```ts
 this.client.on('messageToClient', (message: Message) => {
-  const chatRoom = this.$chatRoom.value;
+  const chatRoom = this.chatRoom$.value;
   if (chatRoom) {
     chatRoom.messages.push(message);
-    this.$chatRoom.next(chatRoom);
+    this.chatRoom$.next(chatRoom);
   }
 });
 ```
 
-add sendMessage method to class:
+#### Add sendMessage Method
+
+Next, add the `sendMessage` method, which will emit the `messageToServer` event
+and pass along the user's message.
 
 ```ts
 sendMessage(content: string) {
   const message = {
-    user: this.$user.value,
+    user: this.user$.value,
     content
   };
   this.client.emit('messageToServer', {
-    room: this.$activeRoom.value,
+    room: this.activeRoom$.value,
     message,
   });
 }
 ```
 
-### app component
+### AppComponent
 
-replace empty sendMessage with new one:
+#### Send Message to Service
+
+Update the current `sendMessage` method that is empty to the following:
 
 ```ts
 sendMessage() {
@@ -91,9 +112,25 @@ sendMessage() {
 }
 ```
 
-### app component html
+This method is bound to the Send button in the UI.
 
-replace the div tag with the class 'messages' with:
+### AppComponent Template
+
+#### Update Messages List
+
+Around line 33, update the div with the class of messages.
+
+Replace:
+
+```html
+<div class="messages">
+  <ul>
+    <li>[user]: message</li>
+  </ul>
+</div>
+```
+
+With:
 
 ```html
 <div
@@ -107,3 +144,7 @@ replace the div tag with the class 'messages' with:
   </ul>
 </div>
 ```
+
+And with that, you should have a fully functioning chat app! Give it a try.
+
+

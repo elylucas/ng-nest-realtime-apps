@@ -17,10 +17,13 @@ First, make sure your current branch is clean, and then checkout the
 ```bash
 git checkout lab2-start
 ```
+:::info
 
 You can find a completed version of this lab in the
 [lab2-complete](https://github.com/elylucas/ng-nest-realtime-apps/tree/lab2-complete)
 branch.
+
+:::
 
 The starting branch contains the skeleton of the app we will use. On the client side, we are only going to use the home page powered by the app component. Most of the HTML and all of the CSS are already in place in the app component's style and template files. We'll be modifying the TypeScript file and updating the template a bit as we build the app out.
 

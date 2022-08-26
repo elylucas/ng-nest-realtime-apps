@@ -19,7 +19,7 @@ clients join and leave rooms.
 To kick it off, we need a couple of data structures. We'll create `ChatService`
 and `Message` interfaces. The `Message` will represent a single chat message,
 and it will have the `user` and the `content` of the message as values.
-`ChatRoom` is hold the `users` currently in a chat room and its `messages`.
+`ChatRoom` will hold the `users` and messages currently in a chat room.
 
 ```ts title=./server/src/chat/chat.service.ts
 export interface Message {
