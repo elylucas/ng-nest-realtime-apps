@@ -46,3 +46,13 @@ This will start the dev servers for both apps.
 The Angular app should launch a browser to [http://localhost:4200](http://localhost:4200). If it did not, go ahead and open it. The initial page will have a simple welcome message.
 
 Once the app is running and you have your code editor open, you are ready to continue to the first lab.
+
+## Code Editor
+
+Now, open up the projects in your code editor.
+
+With so many files with similar names, it can get confusing as to what file you are editing. Therefore, I recommend you open the **client** and **server** projects in separate editor instances. 
+
+If you are using VS Code, there are color customizations in each project that will turn you tab backgrounds into different colors based on the project: The **client** project will be a red and the **server** project will be green.
+
+![Tab Colors](/img/tab-colors.jpg)

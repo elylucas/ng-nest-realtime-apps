@@ -2,11 +2,13 @@
 sidebar_position: 4
 ---
 
-# Messaging
+# Sending Messages
 
 ## Nest
 
-### Chat Service
+We have most of the infrastructure in place to 
+
+### ChatService
 
 add addMessage to class:
 
