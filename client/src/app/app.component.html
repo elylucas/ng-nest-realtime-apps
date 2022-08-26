@@ -1,18 +1,24 @@
-<ng-container *ngIf="true">
-  <div *ngIf="false; else login">
+<ng-container *ngIf="chatAppData$ | async as data">
+  <div *ngIf="data.connected; else login">
     <div class="chat-container">
       <div class="left-pane">
         <div class="rooms">
           <h3>Rooms:</h3>
           <ul>
-            <li class="active">General</li>
+            <li
+              [ngClass]="{ active: data.activeRoom === room }"
+              (click)="switchRoom(room)"
+              *ngFor="let room of data.rooms"
+            >
+              {{ room }}
+            </li>
           </ul>
         </div>
 
         <div class="users">
           <h3>Users:</h3>
           <ul>
-            <li>User</li>
+            <li *ngFor="let user of data.chatRoom.users">{{ user }}</li>
           </ul>
         </div>
         <div class="actions">
@@ -21,11 +27,18 @@
       </div>
 
       <div class="chat-pane">
-        <div class="user">Welcome user, Room room</div>
+        <div class="user">
+          Welcome {{ data.user }}, Room {{ data.activeRoom }}
+        </div>
         <div class="messages">
-          <div class="messages">
+          <div
+            *ngIf="data.chatRoom.messages.length > 0; else noMessages"
+            class="messages"
+          >
             <ul>
-              <li>[user]: message</li>
+              <li *ngFor="let message of data.chatRoom.messages">
+                [{{ message.user }}]: {{ message.content }}
+              </li>
             </ul>
           </div>
           <ng-template #noMessages>No messages in this room</ng-template>
