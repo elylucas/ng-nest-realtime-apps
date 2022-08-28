@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Joining and Leaving Rooms
 
-In this lesson we will take a look at how we can have multiple rooms in our chat
+In this lesson, we will take a look at how we can add multiple rooms in our chat
 app, each with their own set of users and messages.
 
 ## Nest
@@ -17,8 +17,8 @@ clients join and leave rooms.
 #### Add Interfaces
 
 To kick it off, we need a couple of data structures. We'll create `ChatService`
-and `Message` interfaces. The `Message` will represent a single chat message,
-and it will have the `user` and the `content` of the message as values.
+and `Message` interfaces. The `Message` will represent a single chat message
+and have the `user` and the `content` of the message as values.
 `ChatRoom` will hold the `users` and messages currently in a chat room.
 
 ```ts title=./server/src/chat/chat.service.ts
@@ -33,13 +33,13 @@ export interface ChatRoom {
 }
 ```
 
-> We could put these interfaces in their own file, but I choose to keep them in
+> We could put these interfaces in their file, but I choose to keep them in
 > the service for simplicity.
 
 #### Store ChatRoom Data
 
 We'll use a JavaScript object to store the chat room data. The key will be the
-name of the chat room, and the value will be a `ChatRoom`. Add the `chatRooms`
+chat room's name, and the value will be a `ChatRoom`. Add the `chatRooms`
 variable directly below the `users` variable:
 
 ```ts title=./server/src/chat/chat.service.ts
@@ -131,11 +131,11 @@ needed.
 
 ### ChatGateway
 
-#### Pass Back List of Rooms Upon Identify
+#### Pass Back a List of Rooms Upon identifying
 
-After the client identifies, thats a good time to give them any information they
+After the client identifies, that's a good time to give them any information they
 need. In our case, they will need a list of all the possible rooms. In the
-`handleIdentify` method, return back the rooms:
+`handleIdentify` method, return the rooms:
 
 ```ts title=./server/src/chat.gateway.ts
 @SubscribeMessage('identify')
@@ -168,15 +168,14 @@ handleLeaveRoom(client: Socket, data: { user: string; room: string }) {
 }
 ```
 
-Here we are using a couple of new APIs that we haven't seen yet.
+Here we are using a few new APIs we haven't seen yet.
 
 Socket.IO has the concept of [rooms](https://socket.io/docs/v4/rooms/) that
-clients can join. These can be used to broadcast events to a subset of clients.
+clients can join. Rooms are used to broadcast events to a subset of clients.
 We'll use rooms to send messages to particular chat rooms.
 
-To join a client into a room, you use `client.join` and pass in the name of the
-room. Events can be sent to that room by specifiying the room name in the `to`
-method before emmiting the event like so:
+To join a client into a room, you use `client.join` and pass in the room's name. Events can be sent to that room by specifying the room name in the `to`
+method before emitting the event like so:
 
 `client.to(data.room).emit('userJoined', data.user);`
 
@@ -209,7 +208,7 @@ around.
 
 #### Add Interfaces
 
-We'll duplicate the `Message` and `ChatRoom` interfaces we have on the server.
+We'll duplicate the `Message` and `ChatRoom` interfaces on the server.
 Add them to the top of the `ChatService`:
 
 ```ts title=./client/src/app/chat.service.ts
@@ -305,7 +304,7 @@ getChatAppData(): Observable<ChatAppData> {
 
 #### Get List of Rooms
 
-The `identify` event now returns back the list of rooms when called. Add a
+The `identify` event now returns the list of rooms when called. Add a
 callback to the method to store the rooms in the observable:
 
 ```ts title=./client/src/app/chat.service.ts
@@ -348,7 +347,7 @@ this.client.on('userLeft', (user: string) => {
 
 #### Add Methods to Join and Leave Rooms
 
-Add methods that will send events to the server when the current user joins and
+Add methods to send events to the server when the current user joins and
 leaves rooms. The `switchRoom` method will be called from the app component and
 have the user leave their current room, then join the new room. The
 `activeRoom$` observable is used to retrieve the current room to leave and then
@@ -427,7 +426,7 @@ switchRoom(room: string) {
 
 #### Update Rooms Lists
 
-Around line 7 in the template, switch out the hard coded list of rooms with one
+Around line 7 in the template, switch out the hard-coded list of rooms with one
 that will now display the real list:
 
 Replace:
@@ -484,9 +483,9 @@ room:
 <div class="user">Welcome {{ user }}, Room {{ data.activeRoom }}</div>
 ```
 
-Visit the app now and see you can now join rooms, and if you open another
+Visit the app and see that you can now join rooms and, if you open another
 browser (must be a different browser vendor like FireFox, Edge, etc.. so the
-local storage values don't get mixed up) and you can see users list update in
+local storage values don't get mixed up), you can see the users list update in
 realtime:
 
 ![Rooms and Users](/img/rooms-and-users.jpg)

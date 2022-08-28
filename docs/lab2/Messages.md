@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Sending Messages
 
-Whats a chat app that can't send message? Not much. So let's fix that.
+What's a chat app that can't send messages? Not much. So let's fix that.
 
 ## Nest
 
@@ -12,12 +12,10 @@ Whats a chat app that can't send message? Not much. So let's fix that.
 
 #### Add Messages to Chat Room
 
-We have already have the infrastructure in place to store our chat rooms and
-messages in the `chatRooms` variable. The only thing we need to do is add a
+We already have the infrastructure to store chat rooms and
+messages in the `chatRooms` variable. We only need to add a
 method to the service that will add a message to the appropriate chat room. Add
 this method to the `ChatService` class:
-
-add addMessage to class:
 
 ```ts title=./server/src/chat/chat.service.ts
 addMessage(room: string, message: Message) {
@@ -52,12 +50,12 @@ To make things a bit easier, we define two different events: `messageToServer`
 that gets called when a client sends a message to the server, and
 `messageToClient`, when the message is sent out to all the other clients.
 
-This handler listens for `messageToServer`, adds the new message to the chat
-service, then broadcasts out the message back to the clients with
+This handler listens for `messageToServer`, and adds the new message to the chat
+service then broadcasts the message back to the clients with
 `messageToClient`.
 
 `client.to()` will send the message to all other clients in the room except for
-the current client. Therefore, we send the same message back to the current
+the current client. Therefore, we send the same message to the current
 client with `client.emit()`.
 
 ## Angular

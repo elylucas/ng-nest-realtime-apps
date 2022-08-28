@@ -4,8 +4,8 @@ sidebar_position: 1
 
 # Lab1 - Echo Client
 
-In this lab we will build the "hello world" of websocket apps, an echo server
-that will simply reply back any text that a client sends to it.
+In this lab, we will build the "hello world" of websocket apps, an echo server
+that will reply any text that a client sends to it.
 
 To get started, checkout the `lab1-start` branch:
 
@@ -23,26 +23,21 @@ branch.
 
 ## Required Dependencies
 
-This lab is already set up with all the dependencies you will require, so no
-need to install anything additional. However, in order to use websockets with
-Angular and NestJS in a new app, a few additional dependencies need to be
-installed beyond the basic project setup:
-
-- Angular: `socket-io.client`
-- NestJS: `@nestjs/platform-socket.io` and `@nestjs/platform-socket.io`
+This lab is set up with all the dependencies you will require, so there is no
+need to install anything additional.
 
 Visit the [NestJS Websocket guide](https://docs.nestjs.com/websockets/gateways)
-for more info.
+for more information on setting up Socket.IO in a new project.
 
 ## Nest Gateway
 
-Let's start off by scaffolding a new gateway in the **server** folder:
+Let's start by scaffolding a new gateway in the **server** folder:
 
 ```shell title='./server'
 nest generate gateway echo
 ```
 
-This will generate a `EchoGateway` class which looks like:
+This will generate an `EchoGateway` class which looks like:
 
 ```ts title=./server/src/echo.gateway.ts
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
@@ -56,20 +51,19 @@ export class EchoGateway {
 }
 ```
 
-A gateway is a NestJS abstraction around setting up a realtime communication
-socket. They are analogous to controllers for API endpoints. They are JavaScript
-classes that are decorated with `@WebSocketGateway()`. Under the hood, NestJS is
-using either the [socket-io](https://socket.io/) library (which we use in this
-course) or the [ws](https://github.com/websockets/ws) library.
+A gateway is a NestJS abstraction around setting up a real-time communication
+socket. Gateways are analogous to controllers for API endpoints. They are
+JavaScript classes that are decorated with `@WebSocketGateway()`. Under the
+hood, NestJS is using either the [socket-io](https://socket.io/) library (which
+we use in this course) or the [ws](https://github.com/websockets/ws) library.
 
 The `@SubscribeMessage()` decorator on a method designates that method as the
-handler for an incoming message. You pass in the string of the event name to
-listen, which the client also designates when sending a message.
+handler for an incoming message. You pass in the event name string to listen
+for, which the client also designates when sending a message.
 
-The parameters passed into the method are the socket client and any data that
-was sent along with the message. To make the gateway "echo" what was sent it,
-instead of returning the hard coded "Hello world!" string, we'll return the
-payload instead. Update the method to do so:
+The parameters passed into the method are the socket client and any data sent
+along with the message. To make the gateway "echo" what was sent, return the
+payload instead of the hard-coded "hello world" string:
 
 ```ts title=./server/src/echo.gateway.ts
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
@@ -86,9 +80,6 @@ export class EchoGateway {
 }
 ```
 
-We also updated the method signature to provide the proper types we expect
-instead of using `any`.
-
 Lastly, we need to enable the websocket to work with clients on other domains by
 enabling CORS. To do so, we can pass in the option to the `@WebSocketGateway()`
 decorator:
@@ -97,7 +88,7 @@ decorator:
 @WebSocketGateway({ cors: true })
 ```
 
-That's it for the server stuff, let's take a look at the client next.
+That's it for the server stuff; let's look at the client next.
 
 ## Angular
 
@@ -108,13 +99,13 @@ add the following import at the top:
 import { io } from 'socket.io-client';
 ```
 
-The `io` object creates new connection to our server and gives us back a client
-of type `Socket` that we can use to send messages to the server.
+The `io` object creates a new connection to our server and gives us back a
+client of type `Socket` that we can use to send messages to the server.
 
 Next, in the `AppComponent` class, we will create a few variables: a `message`
-string that will be bound to the text input, a `returnedResponses` array that
-will contain the responses from the server, and the socket-io client. We
-initialize the client by calling `io` and passing in the URL of the server.
+string that will bind to the text input, a `returnedResponses` array containing
+the server's responses, and the Socket.IO client. We initialize the client by
+calling `io` and passing in the URL of the server.
 
 ```ts title=./client/src/app/app.component.ts
 export class AppComponent {
@@ -124,8 +115,8 @@ export class AppComponent {
 }
 ```
 
-If you were to take a look at the app now, open up dev tools and look at the WS
-(for websockets) tab. You will see a connection being established:
+Look at the app now, and open up the dev tools. Go to the WS (for websockets)
+section of the Network tab. You will see a connection has been established:
 
 ![Dev Tools WebSocket](/img/dev-tools-websocket.jpg)
 
@@ -145,7 +136,7 @@ the payload of the event, and a callback. Remember when we returned the payload
 from `handleMessage()` in the Nest gateway? That response gets passed back to
 the callback.
 
-The next step is updating the app component's template to have a input box and
+The next step is updating the app component's template with an input box and
 button to send the message. Replace the welcome message in
 **app.componenent.html** with the following:
 
@@ -162,7 +153,8 @@ button to send the message. Replace the welcome message in
 </div>
 ```
 
-Here we have a input that is bound to `message`, a button that calls `sendMessage` when clicked, and a list for each item currently in the `returnResponses` array.
+Here we have an input bound to `message`, a button that calls `sendMessage` when
+clicked, and a list for each item currently in the `returnResponses` array.
 
 Now the app echo demo should be fully functional. Give it a try!
 
