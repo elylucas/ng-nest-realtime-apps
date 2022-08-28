@@ -1,0 +1,20 @@
+[
+  {
+    "id": "289725",
+    "name": "ng - add vars to appcomponent",
+    "type": "CodeFragment",
+    "content": "message = '';\n  returnedResponses: string[] = [];\n  socket = io('http://localhost:3000');"
+  },
+  {
+    "id": "343476",
+    "name": "ng - sendMsg method",
+    "type": "CodeFragment",
+    "content": "sendMessage() {\n    this.socket.emit('message', this.message, (msg: string) => {\n      this.returnedResponses.push(msg);\n    });\n  }"
+  },
+  {
+    "id": "301485",
+    "name": "ng - template",
+    "type": "CodeFragment",
+    "content": "<div>\n  <label\n    >Message\n    <input type=\"text\" name=\"messasge\" [(ngModel)]=\"message\" />\n  </label>\n  <button type=\"button\" (click)=\"sendMessage()\">Send</button>\n  <ul>\n    <li *ngFor=\"let message of returnedResponses\">{{ message }}</li>\n  </ul>\n</div>"
+  }
+]

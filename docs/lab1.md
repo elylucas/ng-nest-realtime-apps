@@ -62,8 +62,7 @@ handler for an incoming message. You pass in the event name string to listen
 for, which the client also designates when sending a message.
 
 The parameters passed into the method are the socket client and any data sent
-along with the message. To make the gateway "echo" what was sent, return the
-payload instead of the hard-coded "hello world" string:
+along with the message. Nest supports Socket.IO as well as the ws project, but it doesn't know which you are using, therefore the method it generates uses type `any` for the client. We can update this manually to use the Socket.IO `Socket` class, which is imported from 'socket.io':
 
 ```ts title=./server/src/echo.gateway.ts
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
@@ -72,11 +71,21 @@ import { Socket } from 'socket.io';
 @WebSocketGateway()
 export class EchoGateway {
   @SubscribeMessage('message')
-  //highlight-start
+  //highlight-next-line
   handleMessage(client: Socket, payload: string): string {
     return payload;
   }
-  //highlight-end
+}
+```
+
+To make the gateway "echo" what was sent, return the
+payload instead of the hard-coded "hello world" string:
+
+```ts title=./server/src/echo.gateway.ts
+@SubscribeMessage('message')
+handleMessage(client: Socket, payload: string): string {
+  //highlight-next-line
+  return payload;
 }
 ```
 
@@ -104,14 +113,14 @@ client of type `Socket` that we can use to send messages to the server.
 
 Next, in the `AppComponent` class, we will create a few variables: a `message`
 string that will bind to the text input, a `returnedResponses` array containing
-the server's responses, and the Socket.IO client. We initialize the client by
+the server's responses, and the Socket.IO socket. We initialize the socket by
 calling `io` and passing in the URL of the server.
 
 ```ts title=./client/src/app/app.component.ts
 export class AppComponent {
   message = '';
   returnedResponses: string[] = [];
-  client = io('http://localhost:3000');
+  socket = io('http://localhost:3000');
 }
 ```
 
@@ -125,13 +134,13 @@ component, add the following `sendMessage` method to the class:
 
 ```ts title=./client/src/app/app.component.ts
 sendMessage() {
-  this.client.emit('message', this.message, (msg: string) => {
+  this.socket.emit('message', this.message, (msg: string) => {
     this.returnedResponses.push(msg)
   });
 }
 ```
 
-The Socket client `emit` method takes the event name ('message' in our case),
+The socket `emit` method takes the event name ('message' in our case),
 the payload of the event, and a callback. Remember when we returned the payload
 from `handleMessage()` in the Nest gateway? That response gets passed back to
 the callback.
