@@ -30,9 +30,9 @@
     "content": "sendMessage() {\n    if (this.message) {\n      this.chatService.sendMessage(this.message);\n      this.message = '';\n    }\n  }"
   },
   {
-    "id": "350156",
+    "id": "287438",
     "name": "at: update messages div",
     "type": "CodeFragment",
-    "content": "<div\n            *ngIf=\"data.chatRoom.messages.length > 0; else noMessages\"\n            class=\"messages\"\n          >\n            <ul>\n              <li *ngFor=\"let message of data.chatRoom.messages\">\n                [{{ message.user }}]: {{ message.content }}\n              </li>\n            </ul>\n          </div>"
+    "content": "<div *ngIf=\"data.chatRoom.messages.length > 0; else noMessages\">\n            <ul>\n              <li *ngFor=\"let message of data.chatRoom.messages\">\n                [{{ message.user }}]: {{ message.content }}\n              </li>\n            </ul>\n          </div>"
   }
 ]
