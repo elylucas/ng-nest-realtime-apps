@@ -31,10 +31,7 @@
           Welcome {{ data.user }}, Room {{ data.activeRoom }}
         </div>
         <div class="messages">
-          <div
-            *ngIf="data.chatRoom.messages.length > 0; else noMessages"
-            class="messages"
-          >
+          <div *ngIf="data.chatRoom.messages.length > 0; else noMessages">
             <ul>
               <li *ngFor="let message of data.chatRoom.messages">
                 [{{ message.user }}]: {{ message.content }}
