@@ -1,31 +1,31 @@
 [
   {
     "id": "523900",
-    "name": "ncs: message/chatroom interfaces",
+    "name": "ncs: add message/chatroom interfaces",
     "type": "CodeFragment",
     "content": "export interface Message {\n  user: string;\n  content: string;\n}\n\nexport interface ChatRoom {\n  users: string[];\n  messages: Message[];\n}"
   },
   {
     "id": "491845",
-    "name": "ncs: chatRooms var",
+    "name": "ncs: add chatRooms var",
     "type": "CodeFragment",
     "content": "chatRooms: Record<string, ChatRoom> = {\n    General: { users: [], messages: [] },\n    Angular: { users: [], messages: [] },\n    NestJS: { users: [], messages: [] },\n  };"
   },
   {
     "id": "296362",
-    "name": "ncs: joinRoom/leaveRoom methods",
+    "name": "ncs: add joinRoom/leaveRoom methods",
     "type": "CodeFragment",
     "content": "joinRoom(room: string, user: string) {\n    this.chatRooms[room].users.push(user);\n    // sort the users alphabetically\n    this.chatRooms[room].users.sort((a, b) => {\n      return a.toLowerCase() >= b.toLowerCase() ? 1 : -1;\n    });\n  }\n\n  leaveRoom(room: string, user: string) {\n    this.chatRooms[room].users = this.chatRooms[room].users.filter(\n      (u) => u !== user,\n    );\n  }"
   },
   {
     "id": "496315",
-    "name": "ncs: getChatRoom(s) methods",
+    "name": "ncs: add getChatRoom(s) methods",
     "type": "CodeFragment",
     "content": "getChatRoom(room: string) {\n    return this.chatRooms[room];\n  }\n\n  getChatRooms() {\n    const keys = Object.keys(this.chatRooms);\n    return keys;\n  }"
   },
   {
     "id": "495120",
-    "name": "ncg: remove user on disconnect",
+    "name": "ncs: remove user on disconnect",
     "type": "CodeFragment",
     "content": "// remove user from any joined rooms\n      const rooms = Object.keys(this.chatRooms);\n      rooms.forEach((room) => {\n        this.leaveRoom(room, userToRemove);\n      });"
   },
@@ -103,7 +103,7 @@
   },
   {
     "id": "286017",
-    "name": "at: add switchRoom method",
+    "name": "ac: add switchRoom method",
     "type": "CodeFragment",
     "content": "switchRoom(room: string) {\n    this.chatService.switchRoom(room);\n  }"
   },
@@ -123,6 +123,6 @@
     "id": "437403",
     "name": "at: update welcome ln 30",
     "type": "CodeFragment",
-    "content": "<div class=\"user\">Welcome {{ user }}, Room {{ data.activeRoom }}</div>"
+    "content": "<div class=\"user\">Welcome {{ data.user }}, Room {{ data.activeRoom }}</div>"
   }
 ]

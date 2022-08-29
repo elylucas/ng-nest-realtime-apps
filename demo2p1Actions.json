@@ -1,68 +1,86 @@
 [
   {
     "id": "541008",
-    "name": "nest - Create ChatService",
+    "name": "ns: Create ChatService",
     "type": "CodeFragment",
     "content": "import { Injectable } from '@nestjs/common';\n\n@Injectable()\nexport class ChatService {\n  users: Record<string, string> = {};\n\n  identify(user: string, clientId: string) {\n    this.users[user] = clientId;\n  }\n\n  disconnect(clientId: string) {\n    //look up user by clientId:\n    const users = Object.keys(this.users);\n    let userToRemove = '';\n    users.forEach((user) => {\n      if (this.users[user] === clientId) {\n        userToRemove = user;\n        return;\n      }\n    });\n    if (userToRemove) {\n      delete this.users[userToRemove];\n    }\n    return userToRemove;\n  }\n}"
   },
   {
+    "id": "463605",
+    "name": "ng: replace WebSocketGateway",
+    "type": "CodeFragment",
+    "content": "@WebSocketGateway({ cors: true, namespace: 'chat'})"
+  },
+  {
+    "id": "543371",
+    "name": "ng: replace constructor",
+    "type": "CodeFragment",
+    "content": "constructor(private chatService: ChatService) { }"
+  },
+  {
     "id": "468337",
-    "name": "nest - identify/disconnect",
+    "name": "ng: add identify/disconnect handlers",
     "type": "CodeFragment",
     "content": "@SubscribeMessage('identify')\n  async handleIdentify(client: Socket, user: string) {\n    this.chatService.identify(user, client.id);\n  }\n\n  @SubscribeMessage('disconnect')\n  async handleDisconnect(client: Socket) {\n    this.chatService.disconnect(client.id);\n  }"
   },
   {
     "id": "287405",
-    "name": "ng - Create ChatService",
+    "name": "as: Create ChatService",
     "type": "CodeFragment",
     "content": "import { Injectable } from '@angular/core';\nimport { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';\n\nexport interface ChatAppData {\n  connected: boolean;\n  user: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class ChatService {\n  private connected$ = new BehaviorSubject(false);\n  private user$ = new BehaviorSubject('');\n\n  constructor() {}\n\n  getChatAppData(): Observable<ChatAppData> {\n    const data = combineLatest([this.connected$, this.user$]).pipe(\n      map((value) => {\n        const [connected, user] = value;\n        return {\n          connected,\n          user,\n        };\n      })\n    );\n    return data;\n  }\n}\n"
   },
   {
     "id": "474212",
-    "name": "ng - CS url/client members",
+    "name": "as: add url/client members",
     "type": "CodeFragment",
     "content": "private url = 'http://localhost:3000/chat';\n  private client: Socket;"
   },
   {
     "id": "512079",
-    "name": "ng - CS ctor",
+    "name": "as: replace constructor",
     "type": "CodeFragment",
     "content": "constructor() {\n    this.client = io(this.url, { autoConnect: false });\n\n    this.client.on('connect', () => {\n      this.client.emit('identify', this.user$.value);\n      this.connected$.next(true);\n    });\n    this.client.on('disconnect', () => {\n      this.connected$.next(false);\n    });\n\n    const user = localStorage.getItem('user') || '';\n    if (user) {\n      this.connect(user);\n    }\n  }"
   },
   {
     "id": "452490",
-    "name": "ng - CS connect/disconnect",
+    "name": "as: add connect/disconnect methods",
     "type": "CodeFragment",
     "content": "connect(user: string) {\n    if (this.client.connected) {\n      return;\n    }\n    localStorage.setItem('user', user);\n    this.user$.next(user);\n    this.client.connect();\n  }\n\n  disconnect() {\n    localStorage.removeItem('user');\n    this.client.disconnect();\n    this.user$.next('');\n  }"
   },
   {
     "id": "322773",
-    "name": "ng - AC add chatAppData$ member",
+    "name": "ac: add chatAppData$ member",
     "type": "CodeFragment",
     "content": "chatAppData$!: Observable<ChatAppData>;"
   },
   {
     "id": "437740",
-    "name": "ng - AC ctor",
+    "name": "ac: replace constructor",
     "type": "CodeFragment",
     "content": "constructor(private chatService: ChatService) {}"
   },
   {
     "id": "386083",
-    "name": "ng - AC onInit/connect/disconnect",
+    "name": "ac: add onInit/connect/disconnect methods",
     "type": "CodeFragment",
     "content": "ngOnInit(): void {\n    this.chatAppData$ = this.chatService.getChatAppData();\n  }\n\n  connect() {\n    if (this.user) {\n      this.chatService.connect(this.user);\n    }\n  }\n\n  disconnect() {\n    this.user = '';\n    this.chatService.disconnect();\n  }"
   },
   {
     "id": "517271",
-    "name": "ng - AT ng-container update",
+    "name": "at: replace ng-container",
     "type": "CodeFragment",
     "content": "<ng-container *ngIf=\"chatAppData$ | async as data\">"
   },
   {
     "id": "438385",
-    "name": "ng - AT div connected",
+    "name": "at: replace div connected",
     "type": "CodeFragment",
     "content": "<div *ngIf=\"data.connected; else login\">"
+  },
+  {
+    "id": "479521",
+    "name": "at: update user div",
+    "type": "CodeFragment",
+    "content": "<div class=\"user\">Welcome {{ data.user }}, Room room</div>"
   }
 ]
