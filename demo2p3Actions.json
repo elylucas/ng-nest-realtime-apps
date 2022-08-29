@@ -1,0 +1,38 @@
+[
+  {
+    "id": "329811",
+    "name": "ncs: add `addMessage` method",
+    "type": "CodeFragment",
+    "content": "addMessage(room: string, message: Message) {\n    this.chatRooms[room].messages.push(message);\n  }"
+  },
+  {
+    "id": "334498",
+    "name": "ncg: add `handleMessageToServer` method",
+    "type": "CodeFragment",
+    "content": "@SubscribeMessage('messageToServer')\n  handleMessageToServer(\n    client: Socket,\n    data: {\n      room: string;\n      message: Message;\n    },\n  ) {\n    this.chatService.addMessage(data.room, data.message);\n    client.to(data.room).emit('messageToClient', data.message);\n    client.emit('messageToClient', data.message);\n  }"
+  },
+  {
+    "id": "440537",
+    "name": "acs: add messageToClient listener",
+    "type": "CodeFragment",
+    "content": "this.client.on('messageToClient', (message: Message) => {\n      const chatRoom = this.chatRoom$.value;\n      if (chatRoom) {\n        chatRoom.messages.push(message);\n        this.chatRoom$.next(chatRoom);\n      }\n    });"
+  },
+  {
+    "id": "449481",
+    "name": "acs: add sendMessage method",
+    "type": "CodeFragment",
+    "content": "sendMessage(content: string) {\n    const message = {\n      user: this.user$.value,\n      content,\n    };\n    this.client.emit('messageToServer', {\n      room: this.activeRoom$.value,\n      message,\n    });\n  }"
+  },
+  {
+    "id": "399476",
+    "name": "ac: replace sendMessage method",
+    "type": "CodeFragment",
+    "content": "sendMessage() {\n    if (this.message) {\n      this.chatService.sendMessage(this.message);\n      this.message = '';\n    }\n  }"
+  },
+  {
+    "id": "350156",
+    "name": "at: update messages div",
+    "type": "CodeFragment",
+    "content": "<div\n            *ngIf=\"data.chatRoom.messages.length > 0; else noMessages\"\n            class=\"messages\"\n          >\n            <ul>\n              <li *ngFor=\"let message of data.chatRoom.messages\">\n                [{{ message.user }}]: {{ message.content }}\n              </li>\n            </ul>\n          </div>"
+  }
+]

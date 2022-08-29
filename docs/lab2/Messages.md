@@ -29,7 +29,7 @@ addMessage(room: string, message: Message) {
 
 Add a new event handler to listen for `messageToServer` events:
 
-```ts
+```ts title=./server/src/chat.gateway.ts
 @SubscribeMessage('messageToServer')
 handleMessageToServer(
   client: Socket,
@@ -67,7 +67,7 @@ client with `client.emit()`.
 In the Angular `ChatService`, we will add a listener for incoming messages. Add
 the following in the constructor below the other listeners:
 
-```ts
+```ts title=./client/src/app/chat.service.ts
 this.client.on('messageToClient', (message: Message) => {
   const chatRoom = this.chatRoom$.value;
   if (chatRoom) {
@@ -82,7 +82,7 @@ this.client.on('messageToClient', (message: Message) => {
 Next, add the `sendMessage` method, which will emit the `messageToServer` event
 and pass along the user's message.
 
-```ts
+```ts title=./client/src/app/chat.service.ts
 sendMessage(content: string) {
   const message = {
     user: this.user$.value,
@@ -101,7 +101,7 @@ sendMessage(content: string) {
 
 Update the current `sendMessage` method that is empty to the following:
 
-```ts
+```ts title=./client/src/app/app.component.ts
 sendMessage() {
   if (this.message) {
     this.chatService.sendMessage(this.message);
@@ -120,7 +120,7 @@ Around line 33, update the div with the class of messages.
 
 Replace:
 
-```html
+```html title=./client/src/app/app.component.html
 <div class="messages">
   <ul>
     <li>[user]: message</li>
@@ -130,7 +130,7 @@ Replace:
 
 With:
 
-```html
+```html title=./client/src/app/app.component.html
 <div
   *ngIf="data.chatRoom.messages.length > 0; else noMessages"
   class="messages"

@@ -514,11 +514,96 @@ update welcome section with real room name around line 30
 <div class="user">Welcome {{ user }}, Room {{ data.activeRoom }}</div>
 ```
 
-```ts
-//joining
-socket.join('angular');
-//send message to room
-{socket|server}.to('angular').emit('message', 'hello ng peeps!');
-//leaving
-socket.leave('angular');
+## Part 3 - Sending Messages
+
+### Nest
+
+#### Update ChatService
+
+add `addMessage` method
+
+```ts title=./server/src/chat/chat.service.ts
+addMessage(room: string, message: Message) {
+  this.chatRooms[room].messages.push(message);
+}
+```
+
+#### Update ChatGateway
+
+add `handleMessageToServer` method
+
+```ts title=./server/src/chat.gateway.ts
+@SubscribeMessage('messageToServer')
+handleMessageToServer(
+  client: Socket,
+  data: {
+    room: string;
+    message: Message;
+  },
+) {
+  this.chatService.addMessage(data.room, data.message);
+  client.to(data.room).emit('messageToClient', data.message);
+  client.emit('messageToClient', data.message);
+}
+```
+
+### Angular
+
+#### Update ChatService
+
+add `messageToClient` listener after others in ctor
+
+```ts title=./client/src/app/chat.service.ts
+this.client.on('messageToClient', (message: Message) => {
+  const chatRoom = this.chatRoom$.value;
+  if (chatRoom) {
+    chatRoom.messages.push(message);
+    this.chatRoom$.next(chatRoom);
+  }
+});
+```
+
+add `sendMessage` method
+
+```ts title=./client/src/app/chat.service.ts
+sendMessage(content: string) {
+  const message = {
+    user: this.user$.value,
+    content
+  };
+  this.client.emit('messageToServer', {
+    room: this.activeRoom$.value,
+    message,
+  });
+}
+```
+
+#### Update AppComponent
+
+replace `sendMessage` method
+
+```ts title=./client/src/app/app.component.ts
+sendMessage() {
+  if (this.message) {
+    this.chatService.sendMessage(this.message);
+    this.message = '';
+  }
+}
+```
+
+#### Update Template
+
+around line 33, update messages div
+
+```html title=./client/src/app/app.component.html
+<div
+  *ngIf="data.chatRoom.messages.length > 0; else noMessages"
+  class="messages"
+>
+  <ul>
+    <li *ngFor="let message of data.chatRoom.messages">
+      [{{ message.user }}]: {{ message.content }}
+    </li>
+  </ul>
+</div>
 ```
