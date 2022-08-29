@@ -3,7 +3,7 @@
     {
       "regex": "server/.*",
       "color": "#00FF0055",
-      "lable": "Node"
+      "label": "Node"
     },
     {
       "regex": "client/.*",
@@ -11,13 +11,6 @@
       "label": "Angular"
     }
   ],
-  "colorTabs.titleBackground": true,
-  "colorTabs.ignoreCase": true,
-  "workbench.colorCustomizations": {
-    "tab.activeBorder": "#00FF0055",
-    "titleBar.activeBackground": "#00FF0055",
-    "titleBar.activeForeground": "#000000",
-    "statusBar.background": "#00FF0055",
-    "statusBar.foreground": "#000000"
-  }
+  "colorTabs.titleBackground": false,
+  "colorTabs.tabBorder": true,
 }
