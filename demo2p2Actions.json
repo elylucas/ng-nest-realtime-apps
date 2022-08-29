@@ -1,0 +1,128 @@
+[
+  {
+    "id": "523900",
+    "name": "ncs: message/chatroom interfaces",
+    "type": "CodeFragment",
+    "content": "export interface Message {\n  user: string;\n  content: string;\n}\n\nexport interface ChatRoom {\n  users: string[];\n  messages: Message[];\n}"
+  },
+  {
+    "id": "491845",
+    "name": "ncs: chatRooms var",
+    "type": "CodeFragment",
+    "content": "chatRooms: Record<string, ChatRoom> = {\n    General: { users: [], messages: [] },\n    Angular: { users: [], messages: [] },\n    NestJS: { users: [], messages: [] },\n  };"
+  },
+  {
+    "id": "296362",
+    "name": "ncs: joinRoom/leaveRoom methods",
+    "type": "CodeFragment",
+    "content": "joinRoom(room: string, user: string) {\n    this.chatRooms[room].users.push(user);\n    // sort the users alphabetically\n    this.chatRooms[room].users.sort((a, b) => {\n      return a.toLowerCase() >= b.toLowerCase() ? 1 : -1;\n    });\n  }\n\n  leaveRoom(room: string, user: string) {\n    this.chatRooms[room].users = this.chatRooms[room].users.filter(\n      (u) => u !== user,\n    );\n  }"
+  },
+  {
+    "id": "496315",
+    "name": "ncs: getChatRoom(s) methods",
+    "type": "CodeFragment",
+    "content": "getChatRoom(room: string) {\n    return this.chatRooms[room];\n  }\n\n  getChatRooms() {\n    const keys = Object.keys(this.chatRooms);\n    return keys;\n  }"
+  },
+  {
+    "id": "495120",
+    "name": "ncg: remove user on disconnect",
+    "type": "CodeFragment",
+    "content": "// remove user from any joined rooms\n      const rooms = Object.keys(this.chatRooms);\n      rooms.forEach((room) => {\n        this.leaveRoom(room, userToRemove);\n      });"
+  },
+  {
+    "id": "284928",
+    "name": "ncg: return rooms after identify",
+    "type": "CodeFragment",
+    "content": "return this.chatService.getChatRooms()"
+  },
+  {
+    "id": "350980",
+    "name": "ncg: add joinRoom/leaveRoom handlers",
+    "type": "CodeFragment",
+    "content": "@SubscribeMessage('joinRoom')\n  handleJoinRoom(client: Socket, data: { user: string; room: string }) {\n    this.chatService.joinRoom(data.room, data.user);\n    client.join(data.room);\n    client.to(data.room).emit('userJoined', data.user);\n    return this.chatService.getChatRoom(data.room);\n  }\n\n  @SubscribeMessage('leaveRoom')\n  handleLeaveRoom(client: Socket, data: { user: string; room: string }) {\n    this.chatService.leaveRoom(data.room, data.user);\n    client.leave(data.room);\n    client.to(data.room).emit('userLeft', data.user);\n  }"
+  },
+  {
+    "id": "459114",
+    "name": "ncg: replace handleDisconnect contents",
+    "type": "CodeFragment",
+    "content": "const user = this.chatService.disconnect(client.id);\n    client.broadcast.emit('userLeft', user);"
+  },
+  {
+    "id": "482983",
+    "name": "acs: add Message/ChatRoom interfaces",
+    "type": "CodeFragment",
+    "content": "export interface Message {\n  user: string;\n  content: string;\n}\n\nexport interface ChatRoom {\n  users: string[];\n  messages: Message[];\n}"
+  },
+  {
+    "id": "498875",
+    "name": "acs: replace ChatAppData interface",
+    "type": "CodeFragment",
+    "content": "export interface ChatAppData {\n  activeRoom: string;\n  chatRoom: ChatRoom;\n  connected: boolean;\n  rooms: string[]\n  user: string;\n}"
+  },
+  {
+    "id": "364592",
+    "name": "acs: add new observables",
+    "type": "CodeFragment",
+    "content": "private activeRoom$ = new BehaviorSubject('General');\n  private chatRoom$ = new BehaviorSubject<ChatRoom>({\n    users: [],\n    messages: [],\n  });\n  private rooms$ = new BehaviorSubject<string[]>([]);"
+  },
+  {
+    "id": "417170",
+    "name": "acs: replace getChatAppData",
+    "type": "CodeFragment",
+    "content": "getChatAppData(): Observable<ChatAppData> {\n    const data = combineLatest([\n      this.activeRoom$,\n      this.chatRoom$,\n      this.connected$,\n      this.rooms$,\n      this.user$,\n    ]).pipe(\n      map((value) => {\n        const [activeRoom, chatRoom, connected, rooms, user] = value;\n        return {\n          activeRoom,\n          chatRoom,\n          connected,\n          rooms,\n          user,\n        };\n      })\n    );\n    return data;\n  }"
+  },
+  {
+    "id": "307569",
+    "name": "acs: replace identity emit",
+    "type": "CodeFragment",
+    "content": "this.client.emit('identify', this.user$.value, (rooms: string[]) => {\n        this.rooms$.next(rooms);\n      });"
+  },
+  {
+    "id": "364960",
+    "name": "acs: add userJoined/userLeft listeners",
+    "type": "CodeFragment",
+    "content": "this.client.on('userJoined', (user: string) => {\n      const chatRoom = this.chatRoom$.value;\n      if (chatRoom) {\n        chatRoom.users.push(user);\n        // Sort the users alphabetically\n        chatRoom.users.sort((a, b) => {\n          return a.toLowerCase() >= b.toLowerCase() ? 1 : -1;\n        });\n        this.chatRoom$.next(chatRoom);\n      }\n    });\n    this.client.on('userLeft', (user: string) => {\n      const chatRoom = this.chatRoom$.value;\n      if (chatRoom) {\n        chatRoom.users = chatRoom.users.filter((u) => u !== user);\n        this.chatRoom$.next(chatRoom);\n      }\n    });"
+  },
+  {
+    "id": "537975",
+    "name": "acs: add joinRoom/leaveRoom/switchRoom methods",
+    "type": "CodeFragment",
+    "content": "private joinRoom(room: string) {\n    this.client.emit(\n      'joinRoom',\n      { user: this.user$.value, room },\n      (chatRoom: ChatRoom) => {\n        this.chatRoom$.next(chatRoom);\n      }\n    );\n  }\n\n  private leaveRoom(room: string) {\n    this.client.emit('leaveRoom', { user: this.user$.value, room });\n  }\n\n  switchRoom(room: string) {\n    const activeRoom = this.activeRoom$.value;\n    this.leaveRoom(activeRoom);\n    this.joinRoom(room);\n    this.activeRoom$.next(room);\n  }"
+  },
+  {
+    "id": "289513",
+    "name": "acs: joinRoom after connect",
+    "type": "CodeFragment",
+    "content": "this.joinRoom(this.activeRoom$.value);"
+  },
+  {
+    "id": "444346",
+    "name": "acs: leaveRoom before disconnect",
+    "type": "CodeFragment",
+    "content": "this.leaveRoom(this.activeRoom$.value);"
+  },
+  {
+    "id": "286017",
+    "name": "at: add switchRoom method",
+    "type": "CodeFragment",
+    "content": "switchRoom(room: string) {\n    this.chatService.switchRoom(room);\n  }"
+  },
+  {
+    "id": "515308",
+    "name": "at: update room list ln 7",
+    "type": "CodeFragment",
+    "content": "<ul>\n            <li\n              [ngClass]=\"{ active: data.activeRoom === room }\"\n              (click)=\"switchRoom(room)\"\n              *ngFor=\"let room of data.rooms\"\n            >\n              {{ room }}\n            </li>\n          </ul>"
+  },
+  {
+    "id": "292313",
+    "name": "at: update user list ln 20",
+    "type": "CodeFragment",
+    "content": "<ul>\n            <li *ngFor=\"let user of data.chatRoom.users\">{{ user }}</li>\n          </ul>"
+  },
+  {
+    "id": "437403",
+    "name": "at: update welcome ln 30",
+    "type": "CodeFragment",
+    "content": "<div class=\"user\">Welcome {{ user }}, Room {{ data.activeRoom }}</div>"
+  }
+]

@@ -196,6 +196,8 @@ export interface ChatAppData {
   providedIn: 'root',
 })
 export class ChatService {
+  private connected$ = new BehaviorSubject(false);
+  private user$ = new BehaviorSubject('');
   //highlight-start
   private url = 'http://localhost:3000/chat';
   private client: Socket;
@@ -234,6 +236,8 @@ export class ChatService {
     this.user$.next('');
   }
   //highlight-end
+
+  // getChatAppData omitted for brevity
 }
 ```
 
@@ -298,16 +302,19 @@ export class AppComponent implements OnInit {
 
   //highlight-start
   connect() {
+    //highlight-start
     if (this.user) {
       this.chatService.connect(this.user);
     }
+    //highlight-end
   }
 
   disconnect() {
+    //highlight-start
     this.user = '';
     this.chatService.disconnect();
+    //highlight-end
   }
-  //highlight-end
 
   sendMessage() {}
 }
@@ -328,14 +335,14 @@ alias its return value to `data`, which we will use throughout the rest of the
 template.
 
 ```html title=./client/src/app/app.component.html
-<ng-container *ngIf="chatAppData$ | async as data"></ng-container>
+<ng-container *ngIf="chatAppData$ | async as data">
 ```
 
 On the next line, update the `ngIf` on the `div` tag to display if
 `data.connected` is true:
 
 ```html title=./client/src/app/app.component.html
-<div *ngIf="data.connected; else login"></div>
+<div *ngIf="data.connected; else login">
 ```
 
 This displays the chat interface if the user is connected, else it displays the

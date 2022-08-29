@@ -85,7 +85,6 @@ Next, we'll add a couple of methods that the gateway will need to pull back an
 individual chat room as well as a list of all the available rooms:
 
 ```ts title=./server/src/chat/chat.service.ts
-
 getChatRoom(room: string) {
   return this.chatRooms[room];
 }
@@ -151,7 +150,7 @@ async handleIdentify(client: Socket, user: string) {
 The `handleJoinRoom` and `handleLeaveRoom` are events the client will raise as
 they move between rooms client side:
 
-```ts
+```ts title=./server/src/chat.gateway.ts
 @SubscribeMessage('joinRoom')
 handleJoinRoom(client: Socket, data: { user: string; room: string }) {
   this.chatService.joinRoom(data.room, data.user);
@@ -189,7 +188,7 @@ When a user disconnects, we'll broadcast an event that they left the room.
 Update the `handleDisconnect` method to emit a `userLeft` event and pass in the
 user name returned from disconnecting the client in the service:
 
-```ts
+```ts title=./server/src/chat.gateway.ts
 @SubscribeMessage('disconnect')
 async handleDisconnect(client: Socket) {
   //highlight-start
