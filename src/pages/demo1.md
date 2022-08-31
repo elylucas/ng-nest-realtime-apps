@@ -6,11 +6,7 @@
 nest generate gateway echo
 ```
 
-update `@WebsockeGateway` to use cors:
 
-```ts title=./server/src/echo.gateway.ts
-@WebSocketGateway({ cors: true })
-```
 
 update `handleMessage` to add types to params and return payload
 

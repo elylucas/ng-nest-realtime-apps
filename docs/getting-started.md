@@ -14,7 +14,7 @@ This workshop covers using NestJS as a real-time server for Angular apps.
 To get started, clone the repo and install the dependencies:
 
 ```bash
-git clone https://github.com/elylucas/realtime-ng-nest.git
+https://github.com/elylucas/ng-nest-realtime-apps
 ```
 
 Go into the repo's folder and install the dependencies:
