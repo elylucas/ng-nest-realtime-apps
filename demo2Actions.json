@@ -102,6 +102,12 @@
     "content": "export interface Message {\n  user: string;\n  content: string;\n}\n\nexport interface ChatRoom {\n  users: string[];\n  messages: Message[];\n}"
   },
   {
+    "id": "491845",
+    "name": "ncs: add chatRooms var",
+    "type": "CodeFragment",
+    "content": "chatRooms: Record<string, ChatRoom> = {\n    General: { users: [], messages: [] },\n    Angular: { users: [], messages: [] },\n    NestJS: { users: [], messages: [] },\n  };"
+  },
+  {
     "id": "296362",
     "name": "ncs: add joinRoom/leaveRoom methods",
     "type": "CodeFragment",
@@ -118,12 +124,6 @@
     "name": "ncs: remove user on disconnect",
     "type": "CodeFragment",
     "content": "// remove user from any joined rooms\n      const rooms = Object.keys(this.chatRooms);\n      rooms.forEach((room) => {\n        this.leaveRoom(room, userToRemove);\n      });"
-  },
-  {
-    "id": "491845",
-    "name": "ncs: add chatRooms var",
-    "type": "CodeFragment",
-    "content": "chatRooms: Record<string, ChatRoom> = {\n    General: { users: [], messages: [] },\n    Angular: { users: [], messages: [] },\n    NestJS: { users: [], messages: [] },\n  };"
   },
   {
     "id": "284928",
